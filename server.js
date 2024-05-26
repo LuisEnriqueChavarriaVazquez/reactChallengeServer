@@ -2,6 +2,10 @@
 export default async (req, res) => {
     const fetch = (await import('node-fetch')).default;
     const url = 'https://dev.obtenmas.com/catom/api/challenge/banks';
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   
     try {
       const apiRes = await fetch(url);
