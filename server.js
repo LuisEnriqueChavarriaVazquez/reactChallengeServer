@@ -10,7 +10,7 @@ export default async (req, res) => {
 
     // Configuración de CORS para aumentar la seguridad limitando los orígenes que pueden hacer solicitudes.
     // Aquí se define una lista blanca de dominios que están autorizados para acceder a este servidor.
-    const allowedOrigins = ['https://luischvz.com', 'https://luisenriquechavarriavazquez.github.io/reactChallenge'];
+    const allowedOrigins = ['https://luischvz.com', 'https://luisenriquechavarriavazquez.github.io/reactChallenge', 'https://luisenriquechavarriavazquez.github.io'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         // Si el origen de la solicitud está en la lista blanca, se configura para permitir peticiones desde ese origen.
