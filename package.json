@@ -12,6 +12,10 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
-    "http-proxy-middleware": "^3.0.0"
+    "http-proxy-middleware": "^3.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
