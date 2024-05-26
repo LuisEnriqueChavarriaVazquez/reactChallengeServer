@@ -1,47 +1,40 @@
-// api/server.js
 export default async (req, res) => {
-    // Importación dinámica de 'node-fetch' para optimizar el empaquetado en plataformas como Vercel.
-    // Esto permite que Vercel sólo incluya 'node-fetch' cuando realmente se necesite en tiempo de ejecución.
     const fetch = (await import('node-fetch')).default;
-
-    // URL de la API externa a la que se harán las peticiones para obtener datos de bancos.
-    // Esta URL es específica del proveedor 'dev.obtenmas.com' bajo el endpoint 'catom/api/challenge/banks'.
     const url = 'https://dev.obtenmas.com/catom/api/challenge/banks';
 
-    // Configuración de CORS para aumentar la seguridad limitando los orígenes que pueden hacer solicitudes.
-    // Aquí se define una lista blanca de dominios que están autorizados para acceder a este servidor.
-    const allowedOrigins = ['https://luischvz.com'];
+    // Lista de orígenes permitidos
+    const allowedOrigins = [
+        'https://luischvz.com',
+        'https://luisenriquechavarriavazquez.github.io'
+    ];
 
+    // Obtiene el origen de la solicitud
     const origin = req.headers.origin;
+
+    // Depura el origen recibido para verificar qué está llegando exactamente
+    console.log('Origen recibido:', origin);
+
+    // Verifica si el origen está en la lista blanca
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     } else {
-        // Puedes optar por no enviar ninguna cabecera o enviar un error específico si el origen no es permitido
-        res.status(403).send('Origen no permitido');
-        return; // Importante para detener la ejecución si el origen no está permitido
+        // Si no está en la lista blanca, envía un error o no configures el header para CORS
+        res.status(403).json({ message: "Acceso no permitido desde este origen." });
+        return; // Detiene la ejecución si el origen no está permitido
     }
 
-    // Configuración de los métodos HTTP permitidos y los encabezados aceptados.
-    // Esto refuerza la seguridad al asegurarse de que sólo se permitan métodos específicos y cabeceras necesarias.
+    // Configura otros encabezados CORS y métodos permitidos
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     try {
-      // Realización de la petición HTTP GET a la URL especificada.
-      // Se usa await para esperar la respuesta de la API antes de continuar.
-      const apiRes = await fetch(url);
-      // Verificación del estado de la respuesta. Si algo salió mal, se lanza un error con el estado HTTP.
-      if (!apiRes.ok) throw new Error(`HTTP status ${apiRes.status}`);
-      
-      // Conversión de la respuesta en formato JSON.
-      const data = await apiRes.json();
-      // Configuración del tipo de contenido de la respuesta a 'application/json'.
-      res.setHeader('Content-Type', 'application/json');
-      // Envío de la respuesta con estado 200 y los datos en formato JSON.
-      res.status(200).send(data);
+        const apiRes = await fetch(url);
+        if (!apiRes.ok) throw new Error(`HTTP status ${apiRes.status}`);
+
+        const data = await apiRes.json();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(data);
     } catch (err) {
-      // Manejo de errores al capturar cualquier excepción que ocurra durante la solicitud o procesamiento de la respuesta.
-      // Aquí se envía un estado HTTP 500 y un mensaje de error genérico, lo que ayuda a prevenir la exposición de detalles sensibles.
-      res.status(500).json({ error: 'Error al conectar con la API', details: err.message });
+        res.status(500).json({ error: 'Error al conectar con la API', details: err.message });
     }
-  };
+};
