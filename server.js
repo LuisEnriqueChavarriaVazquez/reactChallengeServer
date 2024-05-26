@@ -12,16 +12,13 @@ export default async (req, res) => {
     // Aquí se define una lista blanca de dominios que están autorizados para acceder a este servidor.
     const allowedOrigins = ['https://luischvz.com/', 'https://luisenriquechavarriavazquez.github.io/reactChallenge/'];
     const origin = req.headers.origin;
-    console.log('origin: ', origin);
     if (allowedOrigins.includes(origin)) {
-        console.log('origin: ', origin);
         // Si el origen de la solicitud está en la lista blanca, se configura para permitir peticiones desde ese origen.
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
 
     // Configuración de los métodos HTTP permitidos y los encabezados aceptados.
     // Esto refuerza la seguridad al asegurarse de que sólo se permitan métodos específicos y cabeceras necesarias.
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
